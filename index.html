@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><!-- IDEA_TITLE --> | Founders Research</title>
+  <meta name="description" content="<!-- META_DESCRIPTION -->" />
+  <!-- No analytics, no tracking pixels in Stage 1 -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <span class="logo">Founders Research</span>
+  </header>
+
+  <main>
+
+    <!-- HERO -->
+    <section class="hero">
+      <h1 class="headline">
+        <!-- HEADLINE: outcome-focused, specific, no jargon. Max 10 words.
+             Example: "Stop exporting to Excel for intercompany reconciliation." -->
+        [HEADLINE]
+      </h1>
+      <p class="subheadline">
+        <!-- SUBHEADLINE: who this is for and what it replaces. 1 sentence.
+             Example: "Built for finance managers at multi-entity SMEs who are done with manual workarounds." -->
+        [SUBHEADLINE]
+      </p>
+
+      <!-- PRIMARY CTA -->
+      <form class="capture-form" id="capture-form">
+        <input
+          type="email"
+          name="email"
+          id="email-input"
+          placeholder="your@email.com"
+          required
+          autocomplete="email"
+        />
+        <button type="submit" class="btn-primary">
+          <!-- CTA_BUTTON_TEXT: e.g. "Get early access" / "Join the waitlist" / "See how it works" -->
+          [CTA_BUTTON_TEXT]
+        </button>
+      </form>
+
+      <p class="social-proof">
+        <!-- Update when real number exists. Start with: "Be the first to know when we launch." -->
+        [SOCIAL_PROOF_TEXT]
+      </p>
+    </section>
+
+    <!-- PAIN POINTS -->
+    <section class="pain-points">
+      <h2>Does this sound familiar?</h2>
+      <ul class="pain-list">
+        <li>
+          <!-- PAIN_1: specific scenario, not a generic claim.
+               Example: "Your reconciliation process breaks every time an entity uses a different currency." -->
+          [PAIN_POINT_1]
+        </li>
+        <li>
+          <!-- PAIN_2: another specific, recognisable scenario -->
+          [PAIN_POINT_2]
+        </li>
+        <li>
+          <!-- PAIN_3: the cost of the workaround — time, risk, or money.
+               Example: "Your team spends 6+ hours every month-end on something that should take 20 minutes." -->
+          [PAIN_POINT_3]
+        </li>
+      </ul>
+    </section>
+
+    <!-- WHAT WE'RE BUILDING (brief — no product details) -->
+    <section class="solution-teaser">
+      <h2>What we're building</h2>
+      <p>
+        <!-- 2–3 sentences max. Describe the outcome, not the features.
+             Example: "A tool that handles intercompany reconciliation automatically — no exports, no manual matching, no month-end panic." -->
+        [SOLUTION_TEASER]
+      </p>
+      <p class="stage-note">We're in early research. No product yet — we're talking to [TARGET_ROLE]s first.</p>
+    </section>
+
+    <!-- SECONDARY CTA -->
+    <section class="secondary-cta">
+      <h2>Want to shape what we build?</h2>
+      <p>Join the early access list. We'll share what we learn and give you first access when we have something to show.</p>
+      <form class="capture-form" id="capture-form-2">
+        <input
+          type="email"
+          name="email"
+          id="email-input-2"
+          placeholder="your@email.com"
+          required
+          autocomplete="email"
+        />
+        <button type="submit" class="btn-primary">[CTA_BUTTON_TEXT]</button>
+      </form>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>
+      Founders Research &mdash; independent startup research.
+      Questions? <a href="mailto:research@foundersresearch.co">research@foundersresearch.co</a>
+    </p>
+    <p class="footer-note">We will never share your email. Unsubscribe any time.</p>
+  </footer>
+
+  <script>
+    // Submit handler — sends to Tally webhook via n8n
+    // Replace TALLY_WEBHOOK_URL with your actual endpoint
+    const WEBHOOK_URL = "<!-- TALLY_WEBHOOK_URL -->";
+
+    function handleSubmit(e) {
+      e.preventDefault();
+      const form = e.target;
+      const email = form.querySelector('input[type="email"]').value;
+      const ideaId = "<!-- IDEA_ID -->"; // set per-idea, e.g. "idea-001"
+
+      fetch(WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: email,
+          idea_id: ideaId,
+          source: "landing_page",
+          timestamp: new Date().toISOString()
+        })
+      })
+      .then(() => {
+        form.innerHTML = '<p class="success-msg">You\'re on the list. We\'ll be in touch.</p>';
+      })
+      .catch(() => {
+        // Fallback: show mailto link if webhook fails
+        form.innerHTML = '<p class="error-msg">Something went wrong — email us directly at <a href="mailto:research@foundersresearch.co">research@foundersresearch.co</a></p>';
+      });
+    }
+
+    document.getElementById("capture-form").addEventListener("submit", handleSubmit);
+    document.getElementById("capture-form-2").addEventListener("submit", handleSubmit);
+  </script>
+
+</body>
+</html>
